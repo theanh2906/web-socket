@@ -3,8 +3,9 @@ import { createServer } from 'http';
 const app = express();
 const server = createServer(app);
 import WebSocket, { WebSocketServer } from 'ws';
-const wss = new WebSocket.Server({ server });
-const port = 8080;
+const PORT = process.env.PORT ?? 8080;
+//@ts-ignore
+const wss = new WebSocket.Server({ port: PORT });
 wss.on('connection', (ws: WebSocket) => {
     console.log('WebSocket connection established');
 
@@ -20,9 +21,4 @@ wss.on('connection', (ws: WebSocket) => {
         console.error('WebSocket error:', error);
     });
 });
-// Start the server
-server.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
-});
-
 module.exports = app;
