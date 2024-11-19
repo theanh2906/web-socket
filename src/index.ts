@@ -1,3 +1,4 @@
+import { Socket } from 'dgram';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -9,12 +10,20 @@ const io = new Server(server, {
         origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ["Content-Type"],
-        credentials: true
+        credentials: false
     }
 });
-io.on('connection', (socket) => {
+io.on('connection', (socket: any) => {
     console.log('WebSocket connection established');
-    socket.emit('message', 'Connected!');
+    socket.emit('ready', 'Socket connected!');
+    handleMessage(socket);
+});
+
+app.get('/', (req, res) => {
+    res.json({ success: true })
+})
+
+const handleMessage = (socket: any) => {
     socket.on('message', (message: any) => {
         console.log('Received message:', JSON.parse(message));
     });
@@ -26,11 +35,7 @@ io.on('connection', (socket) => {
     socket.on('error', (error: any) => {
         console.error('WebSocket error:', error);
     });
-});
-
-app.get('/', (req, res) => {
-    res.json({ success: true })
-})
+}
 
 server.listen(PORT, () => {
     console.log(`'server running at port ${PORT}'`);
