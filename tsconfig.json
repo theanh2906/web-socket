@@ -5,6 +5,8 @@
         "module": "commonjs",
         "target": "es6",
         "strict": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "outDir": "dist",
+        "rootDir": "src"
     }
 }
